@@ -1,21 +1,21 @@
 # Solana-based-RPC
-rpc endpoints on solana blockchain
+RPC endpoints on Solana blockchain
 
 
 # Solana RPC Service
 
 ## Description
 
-A lightweight Solana RPC provider with bundle submission support (similar to Jito) and developer-friendly interface. Alternative to Helius with focus on transaction bundling capabilities and clean API design.
+A lightweight Solana RPC provider with developer-friendly interface. Alternative to Helius with focus on transaction bundling capabilities and clean API design.
 
 ## API Endpoints
 
 ### RPC Methods
 
 #### Standard JSON-RPC
-**POST** `/rpc`
+**POST** `/api/info`
 
-Standard Solana JSON-RPC methods proxy.
+Standard Solana JSON-RPC.
 
 **Request Body:**
 ```json
@@ -44,7 +44,7 @@ Standard Solana JSON-RPC methods proxy.
 ### Bundle Submission
 
 #### Submit Bundle
-**POST** `/api/v1/bundles`
+**POST** `/api/bundles`
 
 Submit transaction bundle for execution.
 
@@ -66,7 +66,7 @@ Submit transaction bundle for execution.
 ```
 
 #### Get Bundle Status
-**GET** `/api/v1/bundles/{bundle_id}`
+**GET** `/api/bundles/{bundle_id}`
 
 Check bundle execution status.
 
@@ -79,86 +79,6 @@ Check bundle execution status.
   "transactions": ["signature1", "signature2"]
 }
 ```
-
-#### List Bundles
-**GET** `/api/v1/bundles?limit=10&offset=0`
-
-Get user's bundle history.
-
-**Query Parameters:**
-- `limit` (optional, default: 10)
-- `offset` (optional, default: 0)
-- `status` (optional: pending/confirmed/failed)
-
-**Response:** `200 OK`
-```json
-{
-  "bundles": [
-    {
-      "bundle_id": "uuid",
-      "status": "confirmed",
-      "created_at": "2025-09-30T12:00:00Z"
-    }
-  ],
-  "total": 25
-}
-```
-
----
-
-### API Key Management
-
-#### Create API Key
-**POST** `/api/v1/keys`
-
-Generate new API key.
-
-**Request Body:**
-```json
-{
-  "name": "My Project Key",
-  "rate_limit": 1000
-}
-```
-
-**Response:** `201 Created`
-```json
-{
-  "key_id": "uuid",
-  "api_key": "sk_live_xxxxxx",
-  "name": "My Project Key",
-  "rate_limit": 1000,
-  "created_at": "2025-09-30T12:00:00Z"
-}
-```
-
-#### List API Keys
-**GET** `/api/v1/keys`
-
-Get all API keys for user.
-
-**Response:** `200 OK`
-```json
-{
-  "keys": [
-    {
-      "key_id": "uuid",
-      "name": "My Project Key",
-      "rate_limit": 1000,
-      "requests_used": 450,
-      "created_at": "2025-09-30T12:00:00Z"
-    }
-  ]
-}
-```
-
-#### Delete API Key
-**DELETE** `/api/v1/keys/{key_id}`
-
-Revoke API key.
-
-**Response:** `204 No Content`
-
 ---
 
 ### Tables
