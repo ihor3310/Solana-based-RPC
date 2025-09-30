@@ -79,6 +79,32 @@ Check bundle execution status.
   "transactions": ["signature1", "signature2"]
 }
 ```
+
+---
+
+### Transaction Submission
+
+#### Send Transaction
+**POST** `/api/transaction`
+
+Submit single transaction for execution.
+
+**Request Body:**
+```json
+{
+  "transaction": "base64_encoded_transaction",
+  "priority": "medium"
+}
+```
+
+**Response:** `201 Created`
+```json
+{
+  "signature": "5j7s6NiJS3JAkvgkoc18WVAsiSaci2pxB2A6ueCJP4tprA2TFg9wSyTLeYouxPBJEMzJinENTkpA52YStRW5Dia7",
+  "status": "pending"
+}
+```
+
 ---
 
 ### Tables
