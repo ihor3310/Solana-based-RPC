@@ -18,13 +18,13 @@ A lightweight Solana RPC provider with bundle submission support (similar to Jit
 Standard Solana JSON-RPC methods proxy.
 
 **Request Body:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "getBalance",
-  "params": ["7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"]
-}
+```python
+import requests
+import json
+
+wallet_adress = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+ans = requests.get(f"http://127.0.0.1:8000/rpc/{wallet_adress}")
+print(ans.text)
 ```
 
 **Response:** `200 OK`
