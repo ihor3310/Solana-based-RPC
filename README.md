@@ -36,8 +36,8 @@ print(ans.text)
 
 ### Bundle Submission
 
-#### Submit Bundle
-**POST** `/api/v1/bundles`
+#### Send Bundle
+**POST** `bundles`
 
 Submit transaction bundle for execution.
 
@@ -59,7 +59,7 @@ Submit transaction bundle for execution.
 ```
 
 #### Get Bundle Status
-**GET** `/api/v1/bundles/{bundle_id}`
+**GET** `bundles/{bundle_id}`
 
 Check bundle execution status.
 
@@ -72,87 +72,56 @@ Check bundle execution status.
   "transactions": ["signature1", "signature2"]
 }
 ```
-
-#### List Bundles
-**GET** `/api/v1/bundles?limit=10&offset=0`
-
-Get user's bundle history.
-
-**Query Parameters:**
-- `limit` (optional, default: 10)
-- `offset` (optional, default: 0)
-- `status` (optional: pending/confirmed/failed)
-
-**Response:** `200 OK`
-```json
-{
-  "bundles": [
-    {
-      "bundle_id": "uuid",
-      "status": "confirmed",
-      "created_at": "2025-09-30T12:00:00Z"
-    }
-  ],
-  "total": 25
-}
-```
-
 ---
 
-### API Key Management
-
-#### Create API Key
-**POST** `/api/v1/keys`
-
-Generate new API key.
-
-**Request Body:**
-```json
-{
-  "name": "My Project Key",
-  "rate_limit": 1000
-}
+#### Send Transaction
+**POST** `transaction`
+```python
 ```
-
-**Response:** `201 Created`
-```json
-{
-  "key_id": "uuid",
-  "api_key": "sk_live_xxxxxx",
-  "name": "My Project Key",
-  "rate_limit": 1000,
-  "created_at": "2025-09-30T12:00:00Z"
-}
-```
-
-#### List API Keys
-**GET** `/api/v1/keys`
-
-Get all API keys for user.
-
 **Response:** `200 OK`
 ```json
-{
-  "keys": [
-    {
-      "key_id": "uuid",
-      "name": "My Project Key",
-      "rate_limit": 1000,
-      "requests_used": 450,
-      "created_at": "2025-09-30T12:00:00Z"
-    }
-  ]
+{"signature": "5j7s6NiJS3JAkvgkoc18WVAsiSaci2pxB2A6ueCJP4tprA2TFg9wSyTLeYouxPBJEMzJinENTkpA52YStRW5Dia7", "status": "pending"}
+```
+---
+
+### History
+
+#### History check
+**GET** `history`
+```python
+import requests
+import json
+
+key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+ans = requests.get("http://127.0.0.1:8000/history/{key}")
+print(ans.text)
+```
+#### History (delete item)
+**GET** `history`
+```python
+import requests
+import json
+
+key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+ans = requests.get("http://127.0.0.1:8000/history/{key}")
+print(ans.text)
+```
+#### History (change notes for the last request)
+**GET** `history`
+```python
+import requests
+import json
+
+body = {
+	'id_number': 2,
+	'note': 'this is my prvt rpc'
 }
+ans = requests.get("http://127.0.0.1:8000/history/nt", json=body)
+print(ans.text)
 ```
 
-#### Delete API Key
-**DELETE** `/api/v1/keys/{key_id}`
 
-Revoke API key.
 
-**Response:** `204 No Content`
-
----
 
 ### Tables
 
