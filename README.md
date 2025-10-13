@@ -103,7 +103,8 @@ import requests
 import json
 
 key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-ans = requests.get("http://127.0.0.1:8000/history/{key}")
+count_number = 'X'
+ans = requests.get("http://127.0.0.1:8000/history/{key}/{count_number}")
 print(ans.text)
 ```
 #### History (change notes for the last request)
