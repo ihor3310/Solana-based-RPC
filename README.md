@@ -29,14 +29,7 @@ print(ans.text)
 
 **Response:** `200 OK`
 ```json
-{
-  "jsonrpc": "2.0",
-  "result": {
-    "context": {"slot": 123456},
-    "value": 500000000
-  },
-  "id": 1
-}
+{"wallet_balance_in_lamports":3593272184,"wallet_balance_in_sol":3.593272184}
 ```
 
 ---
