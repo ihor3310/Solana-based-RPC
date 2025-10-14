@@ -7,7 +7,7 @@ from solana.rpc.api import Client
 from solders.pubkey import Pubkey
 import json
 
-class CheckHistiryView(APIView):
+class CheckHistoryView(APIView):
     def get(self, request):
         items = HistoryOfAllRequests.objects.all().values('last_request', 'count', 'note')
         for_json_history = list(items)
