@@ -2,10 +2,53 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rpc_api.models import HistoryOfAllRequests
+from django.views.generic import TemplateView
+from django.http import JsonResponse, HttpResponse
+from .models import RegistrationRequest
 
 from solana.rpc.api import Client
 from solders.pubkey import Pubkey
 import json
+
+class HomePageView(TemplateView):
+    template_name = 'home.html'
+
+
+class RegisterPageView(TemplateView):
+    template_name = 'register.html'
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            first_name = data.get('first_name', '')
+            last_name = data.get('last_name', '')
+            email = data.get('email')
+            password = data.get('password')
+            
+            registration = RegistrationRequest.objects.create(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password
+            )
+            
+            return JsonResponse({'success': True, 'id': registration.id}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+
+class LoginPageView(TemplateView):
+    template_name = 'login.html'
+
+
+class PublicPageView(TemplateView):
+    template_name = 'public.html'
+
+
+
+
 
 class CheckHistoryView(APIView):
     def get(self, request):
