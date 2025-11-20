@@ -1,0 +1,81 @@
+{% block content %}
+<div style="max-width: 800px; margin: 50px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="font-size: 28px; font-weight: bold; margin: 0;">Public API</h2>
+        <div>
+            <a href="/login/" style="padding: 8px 16px; background: black; color: white; border-radius: 6px; text-decoration: none; margin-left: 10px;">Login</a>
+            <a href="/register/" style="padding: 8px 16px; background: white; color: black; border: 1px solid black; border-radius: 6px; text-decoration: none; margin-left: 10px;">Register</a>
+        </div>
+    </div>
+    
+    <p style="color: #666; margin-bottom: 30px;">Available without authorization</p>
+    
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Solana Wallet Address</label>
+        <input 
+            type="text" 
+            id="wallet" 
+            placeholder="Enter address"
+            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+        >
+    </div>
+    
+    <button 
+        id="checkBtn"
+        style="padding: 10px 20px; background: black; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">Check Balance
+    </button>
+    
+    <div id="loading" style="display: none; margin-top: 20px; padding: 15px; background: white; border-radius: 6px; color: black;">
+        Loading...
+    </div>
+    
+    <div id="result" style="display: none; margin-top: 20px; padding: 15px; background: white; border-radius: 6px;">
+        <div id="data" style="margin-top: 10px;"></div>
+    </div>
+    
+    <div id="error" style="display: none; margin-top: 20px; padding: 15px; background: black; color: red; border-radius: 6px;"></div>
+</div>
+<script>
+document.getElementById('checkBtn').onclick = async () => {
+    const addr = document.getElementById('wallet').value.trim();
+    const result = document.getElementById('result');
+    const error = document.getElementById('error');
+    const loading = document.getElementById('loading');
+    const data = document.getElementById('data');
+    
+    result.style.display = 'none';
+    error.style.display = 'none';
+    loading.style.display = 'none';
+    
+    if (!addr) {
+        error.textContent = 'Enter wallet address!';
+        error.style.display = 'block';
+        return;
+    }
+    
+    loading.style.display = 'block';
+    
+    try {
+        const res = await fetch(`/rpc/${addr}`);
+        const json = await res.json();
+        
+        loading.style.display = 'none';
+        
+        if (res.ok) {
+            data.innerHTML = `
+                <p><strong>Lamports:</strong> ${json.wallet_balance_in_lamports.toLocaleString()}</p>
+                <p><strong>SOL:</strong> ${json.wallet_balance_in_sol.toFixed(9)}</p>
+            `;
+            result.style.display = 'block';
+        } else {
+            error.textContent = json.error || 'Error';
+            error.style.display = 'block';
+        }
+    } catch (e) {
+        loading.style.display = 'none';
+        error.textContent = 'Connection error';
+        error.style.display = 'block';
+    }
+};
+</script>
+{% endblock %}

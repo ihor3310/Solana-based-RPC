@@ -1,0 +1,64 @@
+{% block content %}
+<div style="max-width: 400px; margin: 100px auto; padding: 40px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 30px; text-align: center;">Login</h2>
+    
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px;">Username</label>
+        <input type="text" id="username" maxlength="50" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px;">Password</label>
+        <input type="password" id="password" maxlength="128" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+    </div>
+    
+    <button id="loginBtn" style="width: 100%; padding: 12px; background: black; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Login</button>
+    
+    <div id="error" style="display: none; margin-top: 15px; padding: 10px; background: #fee; color: red; border-radius: 6px; font-size: 14px;"></div>
+    
+    <p style="text-align: center; margin-top: 20px; color: #666;">
+        No account? <a href="/register/" style="color: black;">Register</a>
+    </p>
+</div>
+<script>
+document.getElementById('loginBtn').onclick = async () => {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const error = document.getElementById('error');
+    
+    error.style.display = 'none';
+    
+    if (!username || !password) {
+        error.textContent = 'Fill all fields!';
+        error.style.display = 'block';
+        return;
+    }
+    
+    try {
+        const res = await fetch('/api/auth/login/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({username, password})
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+            localStorage.setItem('accessToken', data.tokens.access);
+            localStorage.setItem('refreshToken', data.tokens.refresh);
+            window.location.href = '/dashboard/';
+        } else {
+            error.textContent = data.error || 'Invalid credentials';
+            error.style.display = 'block';
+        }
+    } catch (e) {
+        error.textContent = 'Connection error';
+        error.style.display = 'block';
+    }
+};
+
+document.getElementById('password').onkeypress = (e) => {
+    if (e.key === 'Enter') document.getElementById('loginBtn').click();
+};
+</script>
+{% endblock %}
